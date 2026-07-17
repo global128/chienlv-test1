@@ -28,9 +28,9 @@ public class UserResource {
     private TransactionService transactionService;
 
     @RequestMapping(value = "/user/all", method = RequestMethod.GET)
-    public List<User> userList() {
-        return userService.findUserList();
-    }
+    // public List<User> userList() {
+    //     return userService.findUserList();
+    // }
 
     @RequestMapping(value = "/user/primary/transaction", method = RequestMethod.GET)
     public List<PrimaryTransaction> getPrimaryTransactionList(@RequestParam("username") String username) {
