@@ -1,4 +1,4 @@
-package com.userfront.controller;
+package com.userfront.controller.user;
 
 import java.security.Principal;
 
