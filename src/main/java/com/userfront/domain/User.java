@@ -51,6 +51,7 @@ public class User implements UserDetails{
     private List<Appointment> appointmentList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Recipient> recipientList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
@@ -120,9 +121,11 @@ public class User implements UserDetails{
         this.appointmentList = appointmentList;
     }
 
+    public List<Recipient> getRecipientList() {
         return recipientList;
     }
 
+    public void setRecipientList(List<Recipient> recipientList) {
         this.recipientList = recipientList;
     }
 

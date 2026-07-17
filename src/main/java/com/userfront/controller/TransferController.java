@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.userfront.domain.PrimaryAccount;
+import com.userfront.domain.Recipient;
 import com.userfront.domain.SavingsAccount;
 import com.userfront.domain.User;
 import com.userfront.service.TransactionService;
@@ -65,10 +66,11 @@ public class TransferController {
     }
 
     @RequestMapping(value = "/recipient/save", method = RequestMethod.POST)
-    public String recipientPost(Principal principal) {
+    public String recipientPost(@ModelAttribute("recipient") Recipient recipient, Principal principal) {
 
         User user = userService.findByUsername(principal.getName());
         recipient.setUser(user);
+        transactionService.saveRecipient(recipient);
 
         return "redirect:/transfer/recipient";
     }
@@ -89,6 +91,7 @@ public class TransferController {
     @Transactional
     public String recipientDelete(@RequestParam(value = "recipientName") String recipientName, Model model, Principal principal){
 
+        transactionService.deleteRecipientByName(recipientName);
 
         List<Recipient> recipientList = transactionService.findRecipientList(principal);
 

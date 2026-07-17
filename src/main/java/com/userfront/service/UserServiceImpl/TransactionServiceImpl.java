@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.userfront.dao.PrimaryAccountDao;
 import com.userfront.dao.PrimaryTransactionDao;
+import com.userfront.dao.RecipientDao;
 import com.userfront.dao.SavingsAccountDao;
 import com.userfront.dao.SavingsTransactionDao;
 import com.userfront.domain.PrimaryAccount;
 import com.userfront.domain.PrimaryTransaction;
+import com.userfront.domain.Recipient;
 import com.userfront.domain.SavingsAccount;
 import com.userfront.domain.SavingsTransaction;
 import com.userfront.domain.User;
@@ -40,6 +42,7 @@ public class TransactionServiceImpl implements TransactionService {
 	private SavingsAccountDao savingsAccountDao;
 	
 	@Autowired
+	private RecipientDao recipientDao;
 	
 
 	public List<PrimaryTransaction> findPrimaryTransactionList(String username){
@@ -98,22 +101,28 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
     
+    public List<Recipient> findRecipientList(Principal principal) {
         String username = principal.getName();
+        List<Recipient> recipientList = recipientDao.findAll().stream() 			//convert list to stream
                 .filter(recipient -> username.equals(recipient.getUser().getUsername()))	//filters the line, equals to username
                 .collect(Collectors.toList());
 
         return recipientList;
     }
 
+    public Recipient saveRecipient(Recipient recipient) {
         return recipientDao.save(recipient);
     }
 
+    public Recipient findRecipientByName(String recipientName) {
         return recipientDao.findByName(recipientName);
     }
 
+    public void deleteRecipientByName(String recipientName) {
         recipientDao.deleteByName(recipientName);
     }
     
+    public void toSomeoneElseTransfer(Recipient recipient, String accountType, String amount, PrimaryAccount primaryAccount, SavingsAccount savingsAccount) {
         if (accountType.equalsIgnoreCase("Primary")) {
             primaryAccount.setAccountBalance(primaryAccount.getAccountBalance().subtract(new BigDecimal(amount)));
             primaryAccountDao.save(primaryAccount);
